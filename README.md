@@ -16,6 +16,10 @@ groq: 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
 ocr space: K82700152188957 
 optic: EedPkFngmDunfWHvwMH3uCrfVxNd3gQ9GAFSktUgtqtb
 
+#Crear entorno virtual
+- python -m venv venv
+- .\venv\Scripts\Activate.ps1
+
 # Instalación de dependencias
 Ejecutar en la carpeta del proyecto:
 
