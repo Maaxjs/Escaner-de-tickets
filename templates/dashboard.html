@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Canadian Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='canadianProfileLogo.png') }}" alt="Canadian Profile">
+        </div>
+        <div class="header-right">
+            {% if logged_in %}
+                <button class="export-btn" id="exportBtn">Exportar (Fin de Mes)</button>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar sesión</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-section">
+            <h1>Panel de Control</h1>
+            <p class="subtitle">Gestor de Tickets</p>
+
+            <div id="message-container"></div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTickets">0</div>
+                    <div class="stat-label">Tickets Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalMonto">$0</div>
+                    <div class="stat-label">Monto Total</div>
+                </div>
+            </div>
+
+            {% if tickets %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>  <th>Imagen</th>
+                                <th>Negocio</th>
+                                <th>Productos</th>
+                                <th>Total</th>
+                                <th>Fecha</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsTable">
+                            {% for ticket in tickets %}
+                                <tr id="ticket-{{ ticket.id }}">
+                                    <td>{{ ticket.id }}</td>
+                                    <td>{{ ticket.nombre_usuario or '-' }}</td> <td>
+                                        <img src="data:image/jpeg;base64,{{ ticket.image_base64 }}" 
+                                             alt="Ticket" class="thumbnail" 
+                                             onclick="showImage(this.src)">
+                                    </td>
+                                    <td>{{ ticket.nombre_negocio or '-' }}</td>
+                                    
+                                    <td>
+                                        {% if ticket['items'] and ticket['items'] | length > 0 %}
+                                            <details class="product-dropdown">
+                                                <summary>{{ ticket['items'] | length }} producto(s)</summary>
+                                                
+                                                <ul class="product-list">
+                                                    {% for item in ticket['items'] %}
+                                                        <li>
+                                                            {{ item.producto | default('Sin descripción', true) }}: 
+                                                            <b>${{ "%.2f"|format(item.precio_total | default(0, true) | float) }}</b>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </details>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    
+                                    <td>${{ "%.2f"|format(ticket.precio_total_compra or 0) }}</td>
+                                    <td>{{ ticket.date_uploaded }}</td>
+                                    <td>
+                                        <button class="delete-btn" onclick="deleteTicket({{ ticket.id }})">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-message">
+                    <p>No hay tickets aún</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">&times;</button>
+            <img id="modalImage" class="modal-image" src="" alt="Ticket grande">
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

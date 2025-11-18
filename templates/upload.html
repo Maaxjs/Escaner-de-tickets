@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Ticket - Canadian Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+
+</head>
+
+<div id="choiceOverlay" class="choice-overlay">
+    <div class="choice-modal">
+        <h3>Seleccionar Fuente</h3>
+        <p>¿Cómo quieres subir tu ticket?</p>
+        <div class="choice-buttons">
+            <button type="button" class="btn" id="chooseCameraBtn">
+                <span class="btn-icon">📸</span> Usar Cámara
+            </button>
+            <button type="button" class="btn" id="chooseFileBtn">
+                <span class="btn-icon">📂</span> Elegir Archivo
+            </button>
+        </div>
+        <button type="button" class="btn-link" id="cancelChoiceBtn">Cancelar</button>
+    </div>
+</div>
+
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='canadianProfileLogo.png') }}" alt="Canadian Profile">
+        </div>
+        {% if logged_in %}
+            <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar sesión</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="logout-btn">Login</a>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <div class="upload-section">
+            <h1>Subir Ticket</h1>
+
+            <div id="message-container"></div>
+
+            <div id="uploadSection" class="upload-area">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Arrastra una foto de ticket aquí</div>
+                <div class="upload-hint">o haz clic para seleccionar</div>
+                <input type="file" id="fileInput" accept="image/*">
+                <input type="file" id="cameraInput" accept="image/*" capture="environment">
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Procesando imagen con OCR...</p>
+                <p style="font-size: 13px; color: #999; margin-top: 10px;">Esto puede tomar unos segundos</p>
+            </div>
+
+            <div class="preview-section" id="previewSection">
+                <div class="image-preview">
+                    <img id="imagePreview" src="" alt="Preview">
+                </div>
+
+                <div class="form-fields">
+                    <h3 style="color: #333; margin-top: 0;">Revisar datos extraídos</h3>
+                    <p style="color: #999; font-size: 13px; margin-bottom: 20px;">Verifica y edita los datos extraídos por el OCR</p>
+                    
+                    <div class="form-group">
+                        <label for="nombreUsuario">Tu Nombre</label>
+                        <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombreNegocio">Nombre del negocio</label>
+                        <input type="text" id="nombreNegocio" placeholder="Ej: Supermercado El Éxito">
+                    </div>
+
+                    <div>
+                        <div class="section-title">Productos</div>
+                        <div class="info-text">Edita la cantidad y precios según sea necesario</div>
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Producto</th>
+                                    <th style="width: 15%;">Cantidad</th>
+                                    <th style="width: 25%;">P. Unitario</th>
+                                    <th style="width: 25%;">P. Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precioTotal">Precio total de compra</label>
+                        <input type="number" id="precioTotal" step="0.01" placeholder="0.00" min="0">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="saveBtn">Guardar ticket</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+</body>
+</html>

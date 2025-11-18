@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación - Ticket</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/confirm.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='canadianProfileLogo.png') }}" alt="Logo">
+        </div>
+        <div class="header-right">
+            {% if logged_in %}
+                <a href="{{ url_for('logout') }}" class="btn">Cerrar sesión</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>✓ Ticket guardado</h1>
+        <p class="meta">ID: {{ ticket.id }} — {{ ticket.date_uploaded }}</p>
+
+        {% if nombre_negocio %}
+            <h2>{{ nombre_negocio }}</h2>
+        {% endif %}
+
+        {% if items %}
+            <h3 style="margin-top:20px; margin-bottom:10px; color:#333">Productos</h3>
+            <div class="table-responsive-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th style="text-align:right">Cantidad</th>
+                        <th style="text-align:right">P. Unitario</th>
+                        <th style="text-align:right">P. Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.producto or item.get('nombre_producto') or '-' }}</td>
+                            <td style="text-align:right">{{ item.cantidad or '1' }}</td>
+                            <td style="text-align:right">${{ "%.2f"|format(item.precio_unitario or 0) }}</td>
+                            <td style="text-align:right"><strong>${{ "%.2f"|format(item.precio_total or 0) }}</strong></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        {% if precio_total_compra %}
+            <div class="total">Total: <strong>${{ "%.2f"|format(precio_total_compra) }}</strong></div>
+        {% endif %}
+
+        <div class="buttons">
+            <a href="{{ url_for('upload') }}" class="btn">Subir otro ticket</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Ir al panel</a>
+        </div>
+    </div>
+</body>
+</html>
+
