@@ -6,6 +6,16 @@ Aplicación que permite procesar tickets mediante OCR.
 Python 3.10 o superior,
 pip instalado
 
+# Credenciales(colocarlas en config.py: USERNAME, PASS, OCR API KEYS):
+
+gmail: ticketsaloe@gmail.com
+pass: txze yqrs ncmj gtqr 
+
+-APIS:
+groq: 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
+ocr space: K82700152188957 
+optic: EedPkFngmDunfWHvwMH3uCrfVxNd3gQ9GAFSktUgtqtb
+
 # Instalación de dependencias
 Ejecutar en la carpeta del proyecto:
 
